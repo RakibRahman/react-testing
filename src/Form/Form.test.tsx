@@ -100,8 +100,29 @@ describe("Form", () => {
         userEvent.click(submitButton)
         const matchErrorVisible = screen.queryByText(/Password does not match/i)
         expect(matchErrorVisible).toBeInTheDocument()
+    })
 
 
+    //Test 8
+    it('should display no error message if every input is valid', () => {
+        render(<Form />)
+        const emailElement: HTMLInputElement = screen.getByLabelText('email')
+        const passwordElement: HTMLInputElement = screen.getByLabelText('password')
+        const repeatPassword: HTMLInputElement = screen.getByPlaceholderText('Repeat Password');
+        const submitButton: HTMLButtonElement = screen.getByRole('button', { name: 'Sign Up' })
+        userEvent.type(emailElement, 'rakib@gmail.com')
+        userEvent.type(passwordElement, '1122334455')
+        userEvent.type(repeatPassword, '1122334455')
+        userEvent.click(submitButton)
+
+        const emailError = screen.queryByText(/Please enter a valid email/i)
+        const passError = screen.queryByText(/Please enter a password more than 6 characters/i)
+        const matchError = screen.queryByText(/Password does not match/i)
+
+        const elements = [emailError, passError, matchError]
+        elements.forEach((element) => {
+            expect(element).not.toBeInTheDocument()
+        })
     })
 
 })

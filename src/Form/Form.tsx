@@ -44,7 +44,7 @@ export const Form = () => {
             return
         }
 
-        alert(formState)
+        console.log(formState)
         // setErrorMessage('')
 
 
@@ -62,7 +62,7 @@ export const Form = () => {
                     <input checked={formState.subscribed} type='checkbox' id='check' name='subscribed' onChange={changeFormState} />
                     <label htmlFor="check">Subscribe?</label>
                 </div>
-                <p>   {errorMessage ? errorMessage : null}</p>
+                <p style={{ color: 'red' }}>   {errorMessage ? errorMessage : null}</p>
 
                 <button className="btn" type='submit'>Sign Up</button>
             </form>
