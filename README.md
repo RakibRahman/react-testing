@@ -1,4 +1,4 @@
-Fundamentals of React Testing using `Jest` & `React-Testing-Library`
+Getting into React Testing using `Jest` & `React-Testing-Library`
 
 _Index:_
 
