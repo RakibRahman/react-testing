@@ -55,4 +55,53 @@ describe("Form", () => {
 
     })
 
+    // Test 5
+    it('Should show error on invalid email', () => {
+        render(<Form />)
+        const errorElement = screen.queryByText(/Please enter a valid email/i)
+        const emailElement: HTMLInputElement = screen.getByLabelText('email')
+        const submitButton: HTMLButtonElement = screen.getByRole('button', { name: 'Sign Up' })
+        expect(errorElement).not.toBeInTheDocument()
+        userEvent.type(emailElement, 'rakib@')
+        userEvent.click(submitButton)
+        const errorElementVisible = screen.queryByText(/Please enter a valid email/i)
+
+        expect(errorElementVisible).toBeInTheDocument()
+    })
+
+    //Test 6
+    it('Should show error if password is less than 6 characters', () => {
+        render(<Form />)
+        const emailElement: HTMLInputElement = screen.getByLabelText('email')
+
+        const passError = screen.queryByText(/Please enter a password more than 6 characters/i)
+        const passwordElement: HTMLInputElement = screen.getByLabelText('password')
+        const submitButton: HTMLButtonElement = screen.getByRole('button', { name: 'Sign Up' })
+        userEvent.type(emailElement, 'rakib@gmail.com')
+        expect(passError).not.toBeInTheDocument()
+        userEvent.type(passwordElement, '1123')
+        userEvent.click(submitButton)
+        const passErrorVisible = screen.queryByText(/Please enter a password more than 6 characters/i)
+        expect(passErrorVisible).toBeInTheDocument()
+
+    })
+    //Test 7
+    it('Should show error if passwords does not match', () => {
+        render(<Form />)
+        const emailElement: HTMLInputElement = screen.getByLabelText('email')
+        const passwordElement: HTMLInputElement = screen.getByLabelText('password')
+        const repeatPassword: HTMLInputElement = screen.getByPlaceholderText('Repeat Password');
+        const submitButton: HTMLButtonElement = screen.getByRole('button', { name: 'Sign Up' })
+        const matchError = screen.queryByText(/Password does not match/i)
+        expect(matchError).not.toBeInTheDocument()
+        userEvent.type(emailElement, 'rakib@gmail.com')
+        userEvent.type(passwordElement, '456456w')
+        userEvent.type(repeatPassword, 'rkddas')
+        userEvent.click(submitButton)
+        const matchErrorVisible = screen.queryByText(/Password does not match/i)
+        expect(matchErrorVisible).toBeInTheDocument()
+
+
+    })
+
 })
