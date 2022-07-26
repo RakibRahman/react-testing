@@ -2,12 +2,38 @@ import { Form } from "./Form";
 import { render, screen } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 
-describe("Form", () => {
+interface TypeForm {
+    email?: string
+    password?: string
+    confirmPassword?: string
+}
 
+const typeForm = ({ email, password, confirmPassword }: TypeForm) => {
+
+    const emailElement: HTMLInputElement = screen.getByLabelText('email')
+    const passwordElement: HTMLInputElement = screen.getByLabelText('password')
+    const repeatPasswordElement: HTMLInputElement = screen.getByPlaceholderText('Repeat Password');
+
+    if (email) {
+        userEvent.type(emailElement, email)
+    }
+
+    if (password) {
+        userEvent.type(passwordElement, password)
+    }
+
+    if (confirmPassword) {
+        userEvent.type(repeatPasswordElement, confirmPassword)
+    }
+
+    return { emailElement, passwordElement, repeatPasswordElement }
+
+}
+
+describe("Form", () => {
     // Test 1
     it("should render the inputs with empty values", () => {
         render(<Form />)
-
         const userName: HTMLInputElement = screen.getByRole('textbox', { name: /user/i })
         const emailElement: HTMLInputElement = screen.getByLabelText('email')
         const passwordElement: HTMLInputElement = screen.getByLabelText('password')
@@ -26,23 +52,35 @@ describe("Form", () => {
         userEvent.type(userName, 'rakib')
         expect(userName.value).toBe('rakib')
 
-        const emailElement: HTMLInputElement = screen.getByLabelText('email')
-        expect(emailElement.value).toBe('');
-        userEvent.type(emailElement, 'rakib@gmail.com')
-        expect(emailElement.value).toBe('rakib@gmail.com')
+        // const emailElement: HTMLInputElement = screen.getByLabelText('email')
 
+
+        // expect(emailElement.value).toBe('');
+        // userEvent.type(emailElement, 'rakib@gmail.com')
+        // expect(emailElement.value).toBe('rakib@gmail.com')
+
+        const { emailElement } = typeForm({
+            email: 'rakib@gmail.com'
+        })
+        expect(emailElement.value).toBe('rakib@gmail.com')
     })
 
     //Test 3
     it('should match password and confirm password', () => {
         render(<Form />)
-        const passwordElement: HTMLInputElement = screen.getByLabelText('password')
-        const repeatPassword: HTMLInputElement = screen.getByPlaceholderText('Repeat Password');
-        userEvent.type(passwordElement, '458458rt')
-        expect(passwordElement.value).toBe('458458rt')
-        userEvent.type(repeatPassword, '458458rt')
-        expect(repeatPassword.value).toBe('458458rt')
-        expect(passwordElement.value).toEqual(repeatPassword.value)
+        // const passwordElement: HTMLInputElement = screen.getByLabelText('password')
+        // const repeatPassword: HTMLInputElement = screen.getByPlaceholderText('Repeat Password');
+        // userEvent.type(passwordElement, '458458rt')
+        // expect(passwordElement.value).toBe('458458rt')
+        // userEvent.type(repeatPassword, '458458rt')
+        // expect(repeatPassword.value).toBe('458458rt')
+        // expect(passwordElement.value).toEqual(repeatPassword.value)
+
+        const { passwordElement, repeatPasswordElement } = typeForm({
+            password: '11224455',
+            confirmPassword: '11224455'
+        })
+        expect(passwordElement.value).toEqual(repeatPasswordElement.value)
     })
 
     //Test 4
