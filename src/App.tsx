@@ -4,11 +4,27 @@ import './App.css';
 import Link from './Link/Link'
 import { Form } from './Form/Form';
 import { Eshop } from './EShop/Eshop';
+import { PostData } from './react-query/PostData';
+import {
+  useQuery,
+  useMutation,
+  useQueryClient,
+  QueryClient,
+  QueryClientProvider,
+} from '@tanstack/react-query'
+
+const queryClient = new QueryClient()
 function App() {
   return (
-    <div className="App">
-      <Eshop />
-    </div>
+
+
+    <QueryClientProvider client={queryClient}>
+      <div className="App">
+        {/* <Eshop />
+        ddd */}
+        <PostData />
+      </div>
+    </QueryClientProvider>
   );
 }
 
