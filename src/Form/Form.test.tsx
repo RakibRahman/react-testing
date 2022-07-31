@@ -30,6 +30,20 @@ const typeForm = ({ email, password, confirmPassword }: TypeForm) => {
 
 }
 
+const clickSubmitButton = (click: boolean = true) => {
+    const submitButton: HTMLButtonElement = screen.getByRole('button', { name: 'Sign Up' })
+    if (click) {
+        userEvent.click(submitButton)
+    }
+    return { submitButton }
+}
+
+const errorMessages = {
+    emailError: screen.queryByText(/Please enter a valid email/i),
+    passError: screen.queryByText(/Please enter a password more than 6 characters/i),
+    matchError: screen.queryByText(/Password does not match/i)
+}
+
 describe("Form", () => {
     // Test 1
     it("should render the inputs with empty values", () => {
@@ -98,10 +112,11 @@ describe("Form", () => {
         render(<Form />)
         const errorElement = screen.queryByText(/Please enter a valid email/i)
         const emailElement: HTMLInputElement = screen.getByLabelText('email')
-        const submitButton: HTMLButtonElement = screen.getByRole('button', { name: 'Sign Up' })
+        // const submitButton: HTMLButtonElement = screen.getByRole('button', { name: 'Sign Up' })
         expect(errorElement).not.toBeInTheDocument()
         userEvent.type(emailElement, 'rakib@')
-        userEvent.click(submitButton)
+        // userEvent.click(submitButton)
+        clickSubmitButton()
         const errorElementVisible = screen.queryByText(/Please enter a valid email/i)
 
         expect(errorElementVisible).toBeInTheDocument()
@@ -126,16 +141,15 @@ describe("Form", () => {
     //Test 7
     it('Should show error if passwords does not match', () => {
         render(<Form />)
-        const emailElement: HTMLInputElement = screen.getByLabelText('email')
-        const passwordElement: HTMLInputElement = screen.getByLabelText('password')
-        const repeatPassword: HTMLInputElement = screen.getByPlaceholderText('Repeat Password');
-        const submitButton: HTMLButtonElement = screen.getByRole('button', { name: 'Sign Up' })
+
         const matchError = screen.queryByText(/Password does not match/i)
         expect(matchError).not.toBeInTheDocument()
-        userEvent.type(emailElement, 'rakib@gmail.com')
-        userEvent.type(passwordElement, '456456w')
-        userEvent.type(repeatPassword, 'rkddas')
-        userEvent.click(submitButton)
+        typeForm({
+            email: 'rakib@gmail.com',
+            password: 'wwwwwwww',
+            confirmPassword: 'dddddddd'
+        })
+        clickSubmitButton()
         const matchErrorVisible = screen.queryByText(/Password does not match/i)
         expect(matchErrorVisible).toBeInTheDocument()
     })
@@ -144,14 +158,19 @@ describe("Form", () => {
     //Test 8
     it('should display no error message if every input is valid', () => {
         render(<Form />)
-        const emailElement: HTMLInputElement = screen.getByLabelText('email')
-        const passwordElement: HTMLInputElement = screen.getByLabelText('password')
-        const repeatPassword: HTMLInputElement = screen.getByPlaceholderText('Repeat Password');
-        const submitButton: HTMLButtonElement = screen.getByRole('button', { name: 'Sign Up' })
-        userEvent.type(emailElement, 'rakib@gmail.com')
-        userEvent.type(passwordElement, '1122334455')
-        userEvent.type(repeatPassword, '1122334455')
-        userEvent.click(submitButton)
+        // const emailElement: HTMLInputElement = screen.getByLabelText('email')
+        // const passwordElement: HTMLInputElement = screen.getByLabelText('password')
+        // const repeatPassword: HTMLInputElement = screen.getByPlaceholderText('Repeat Password');
+        // userEvent.type(emailElement, 'rakib@gmail.com')
+        // userEvent.type(passwordElement, '1122334455')
+        // userEvent.type(repeatPassword, '1122334455')
+
+        typeForm({
+            email: 'rakib@gmail.com',
+            password: '1144778899',
+            confirmPassword: '1144778899'
+        })
+        clickSubmitButton()
 
         const emailError = screen.queryByText(/Please enter a valid email/i)
         const passError = screen.queryByText(/Please enter a password more than 6 characters/i)
