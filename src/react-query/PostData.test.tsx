@@ -10,13 +10,16 @@ describe('PostData', () => {
         renderWithClient(<PostData />)
         const button = (screen.getByRole('button'))
         userEvent.click(button)
+
         expect(await screen.findByText(/Successfully posted/i)).toBeInTheDocument()
     })
 
     it('shows error message', async () => {
         server.use(
             rest.post('*', (req, res, ctx) => {
-                return res(ctx.status(500))
+                return res(ctx.status(500), ctx.json({
+                    name: 'error',
+                }))
             })
         )
 
@@ -24,6 +27,7 @@ describe('PostData', () => {
         const button = (screen.getByRole('button'))
         userEvent.click(button)
         expect(await screen.findByText(/An error has occurred/i)).toBeInTheDocument()
+
 
     })
 })
