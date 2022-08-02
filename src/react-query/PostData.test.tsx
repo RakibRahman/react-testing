@@ -6,6 +6,17 @@ import { server } from '../setupTests'
 import { rest } from 'msw'
 describe('PostData', () => {
 
+    it('should show loading indicator', async () => {
+        server.use(rest.get('https://randomuser.me/api/', (req, res, ctx) => {
+            ctx.delay(400)
+        }))
+        renderWithClient(<PostData />)
+        expect(await screen.findByText(/Loading USer/i)).toBeInTheDocument()
+    })
+    it('should show user name', async () => {
+        renderWithClient(<PostData />)
+        expect(await screen.findByText(/Rakib/i)).toBeInTheDocument()
+    })
     it('renders the post component', async () => {
         renderWithClient(<PostData />)
         const button = (screen.getByRole('button'))
