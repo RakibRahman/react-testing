@@ -2,8 +2,21 @@ import { render, renderHook, act, waitFor, screen } from '@testing-library/react
 import userEvent from '@testing-library/user-event'
 import { PostData } from './PostData'
 import { renderWithClient } from './utils'
-import { server } from '../setupTests'
+
+import { handlers } from './utils'
 import { rest } from 'msw'
+
+import { setupServer } from 'msw/node'
+// import { setLogger } from '@tanstack/react-query'
+
+export const server = setupServer(...handlers)
+// Establish API mocking before all tests.
+beforeAll(() => server.listen())
+// Reset any request handlers that we may add during the tests,
+// so they don't affect other tests.
+afterEach(() => server.resetHandlers())
+// Clean up after the tests are finished.
+afterAll(() => server.close())
 describe('PostData', () => {
 
     it('should show loading indicator', async () => {
