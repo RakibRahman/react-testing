@@ -13,6 +13,7 @@ export const PostData = () => {
             {/* {isError ? 'An error has occurred' : null} */}
             {isLoading ? 'Loading USer' : null}
             {data && data?.data.results[0].name.first}
+            {isUserError ? 'error fetching user' : null}
             <Snackbar ref={snackbarRef} message={isSuccess ? 'Successfully posted' : isError ? 'An error has occurred' : ''} status={isSuccess ? 'success' : 'error'} />
             <br />
             <button onClick={(): void => mutate({

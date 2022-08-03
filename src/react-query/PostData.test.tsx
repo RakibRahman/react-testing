@@ -19,7 +19,7 @@ afterEach(() => server.resetHandlers())
 afterAll(() => server.close())
 describe('PostData', () => {
 
-    it('should show loading indicator', async () => {
+    it('should show loading indicator while fetching user', async () => {
         server.use(rest.get('https://randomuser.me/api/', (req, res, ctx) => {
             ctx.delay(400)
         }))
@@ -29,6 +29,16 @@ describe('PostData', () => {
     it('should show user name', async () => {
         renderWithClient(<PostData />)
         expect(await screen.findByText(/Rakib/i)).toBeInTheDocument()
+    })
+
+    it('Shows error message if fetching user failed', async () => {
+        server.use(rest.get('https://randomuser.me/api/', (req, res, ctx) => {
+            return (res(ctx.status(500), ctx.json({
+                error: { message: 'error occurred while fetching user' }
+            })))
+        }))
+        renderWithClient(<PostData />)
+        expect(await screen.findByText(/error fetching user/i)).toBeInTheDocument()
     })
     it('renders the post component', async () => {
         renderWithClient(<PostData />)
