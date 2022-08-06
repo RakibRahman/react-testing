@@ -16,7 +16,8 @@ import {
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      retry: false
+      retry: false,
+      refetchOnWindowFocus: false,
     }
   }
 })
