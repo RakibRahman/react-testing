@@ -10,7 +10,7 @@ export const Card: React.FC<CardProp> = ({ cat }) => {
         setFavorite((prev) => !prev)
     }
     return (
-        <div className="w-60 bg-gray-400 grid place-items-center relative" data-testid='card'>
+        <div className="w-60 bg-gray-400 grid place-items-center relative" data-testid='card' role='article'>
             <button onClick={toggleHeart} className={`absolute top-0 right-0 ${isFavorite ? 'icon-heart-fill' : 'icon-heart-outline'}`}>
                 {isFavorite ? (<svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="red">
                     <path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd" />
@@ -23,6 +23,8 @@ export const Card: React.FC<CardProp> = ({ cat }) => {
             <img src={cat.image.url} alt={cat.image.alt} className="w-full object-cover h-44" />
             <h1>{cat.name}</h1>
             <p>{cat.color}</p>
+            <p>{cat.gender}</p>
+
         </div>
     )
 }

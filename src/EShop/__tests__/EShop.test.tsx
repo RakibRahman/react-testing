@@ -2,6 +2,7 @@ import { Eshop } from '../Eshop'
 import { render, screen } from '@testing-library/react'
 import { rest } from 'msw'
 import { setupServer } from 'msw/node'
+import userEvent from '@testing-library/user-event';
 const cats = [
     {
         id: 1,
@@ -92,6 +93,7 @@ const server = setupServer(
 )
 
 beforeAll(() => {
+
     server.listen()
 })
 afterEach(() => {
@@ -99,6 +101,7 @@ afterEach(() => {
 })
 
 afterAll(() => {
+
     server.close()
 })
 describe('EShop', () => {
@@ -139,5 +142,33 @@ describe('EShop', () => {
             // Expect the mocked error response to be present in the DOM.
             await screen.findByText("Axios Error with Message: Request failed with status code 500")
         ).toBeInTheDocument();
+    })
+
+    it('Should filter for male cats', async () => {
+
+        render(<Eshop />)
+        const cards = await screen.findAllByRole('article')
+        expect(cards.length).toBe(6)
+        const selectMaleCats: HTMLSelectElement = screen.getByLabelText('filterByGender')
+        userEvent.selectOptions(selectMaleCats, 'male')
+        expect(selectMaleCats.value).toBe('male')
+        const maleCats = screen.getAllByRole('article')
+        expect(maleCats.length).toBe(2);
+        expect(maleCats).toStrictEqual([cards[1], cards[3]])
+        // expect(cards.length).toBe(3)
+    })
+
+    it('Should filter for female cats', async () => {
+
+        render(<Eshop />)
+        const cards = await screen.findAllByRole('article')
+        expect(cards.length).toBe(6)
+        const selectMaleCats: HTMLSelectElement = screen.getByLabelText('filterByGender')
+        userEvent.selectOptions(selectMaleCats, 'female')
+        expect(selectMaleCats.value).toBe('female')
+        const femaleCats = screen.getAllByRole('article')
+        expect(femaleCats.length).toBe(4);
+        expect(femaleCats).toStrictEqual([cards[0], cards[2], cards[4], cards[5]])
+        // expect(cards.length).toBe(3)
     })
 })

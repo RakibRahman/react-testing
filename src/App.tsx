@@ -1,17 +1,12 @@
-import React from 'react';
-import logo from './logo.svg';
 import './App.css';
-import Link from './Link/Link'
-import { Form } from './Form/Form';
+// import Link from './Link/Link'
+// import { Form } from './Form/Form';
 import { Eshop } from './EShop/Eshop';
-import { PostData } from './react-query/PostData';
 import {
-  useQuery,
-  useMutation,
-  useQueryClient,
   QueryClient,
-  QueryClientProvider,
-} from '@tanstack/react-query'
+  QueryClientProvider
+} from '@tanstack/react-query';
+import { PostData } from './react-query/PostData';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -27,9 +22,9 @@ function App() {
 
     <QueryClientProvider client={queryClient}>
       <div className="App">
-        {/* <Eshop />
-        ddd */}
-        <PostData />
+        <Eshop />
+
+        {/* <PostData /> */}
       </div>
     </QueryClientProvider>
   );

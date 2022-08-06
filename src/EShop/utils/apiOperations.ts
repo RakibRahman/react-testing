@@ -6,14 +6,14 @@ export const useFetchProducts = <T>(url: string) => {
     const [data, setData] = useState<T[]>([])
     const [error, setError] = useState<string>('')
     const [loading, setLoading] = useState<boolean>(true)
-    const cancelToken = axios.CancelToken.source()
+
 
     const fetchProducts = async (): Promise<void> => {
 
         try {
             setLoading(true)
             const response = await axios.get<T[]>(url, {
-                cancelToken: cancelToken.token
+
             })
             setData(response.data)
 
@@ -28,13 +28,11 @@ export const useFetchProducts = <T>(url: string) => {
 
     }
     useEffect(() => {
-
+        const abortController = new AbortController();
         fetchProducts();
         return () => {
-            if (cancelToken) {
-                cancelToken.cancel()
-            }
-        }
+            abortController.abort();
+        };
     }, []);
 
 
