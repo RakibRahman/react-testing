@@ -1,9 +1,9 @@
 
+import { useState } from 'react'
 import { Cards } from './Cards'
-import React, { useEffect, useState } from 'react'
-import { useFetchProducts } from './utils/apiOperations'
-import { Cat } from './models/Cards'
 import { Filter } from './Filter'
+import { Cat } from './models/Cards'
+import { useFetchProducts } from './utils/apiOperations'
 export type FilterByCategory = {
     gender: 'male' | 'female' | 'any' | string,
     favorite: 'any' | 'favorite' | 'unfavorite' | string
@@ -17,17 +17,7 @@ export const Eshop = () => {
 
     const catsData = (genderValue: string = 'any', favoriteValue: string = 'any') => {
         if (!data) return []
-
-        const result = data.filter((cat) => (genderValue === 'male' ? cat.gender === 'male' : genderValue === 'female' ? cat.gender === 'female' : cat) && (favoriteValue === 'unfavorite' ? cat.favoured === false : favoriteValue === 'favorite' ? cat.favoured === true : cat))
-
-
-
-        // if (filterCat.gender === 'any' && filterCat.favorite === 'any') return data
-        // if (filterCat.gender === 'male' && filterCat.favorite === 'any') return data.filter((value) => value.gender === 'male')
-        // if (filterCat.gender === 'male' && filterCat.favorite === 'favorite') return data.filter((value) => value.gender === 'male' && value.favoured)
-        // if (filterCat.gender === 'any' && filterCat.favorite === 'unfavorite') return data.filter((value) => value.gender === 'any' && !value.favoured)
-
-        // return data.filter((value) => value.gender === filterCat.gender && filterCat.favorite === 'unfavorite' === !value.favoured)
+        const result = data.filter((cat) => (genderValue === 'any' ? cat : cat.gender === genderValue) && (favoriteValue === 'unfavorite' ? cat.favoured === false : favoriteValue === 'favorite' ? cat.favoured === true : cat))
         return result
     }
 

@@ -21,8 +21,8 @@ export const Filter: React.FC<Props> = ({ filterCat, setFilterCat }) => {
             </div>
 
             <div className='flex flex-col'>
-                <label htmlFor="filterByGender">Filter by Favorite</label>
-                <select aria-label="filterByFav" id="filterByFav" onChange={(e) => setFilterCat({ ...filterCat, favorite: e.target.value })}>
+                <label htmlFor="filterByFavorite">Filter by Favorite</label>
+                <select aria-label="filterByFavorite" id="filterByFavorite" onChange={(e) => setFilterCat({ ...filterCat, favorite: e.target.value })}>
                     <option value="any">Any</option>
                     <option value="favorite">Favorite</option>
                     <option value="unfavorite">Unfavorite</option>

@@ -13,7 +13,7 @@ const cats = [
             url: "https://images.unsplash.com/photo-1529778873920-4da4926a72c2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTJ8fGNhdHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60",
             alt: "beautiful cat",
         },
-        favoured: false,
+        favoured: true,
         color: "grey",
         gender: "female",
     },
@@ -26,7 +26,7 @@ const cats = [
             url: "https://images.unsplash.com/photo-1536590158209-e9d615d525e4?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTl8fGNhdHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60",
             alt: "beautiful cat",
         },
-        favoured: false,
+        favoured: true,
         color: "grey",
         gender: "male",
     },
@@ -78,7 +78,7 @@ const cats = [
             url: "https://images.unsplash.com/photo-1561948955-570b270e7c36?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NXx8Y2F0fGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=800&q=60",
             alt: "beautiful cat",
         },
-        favoured: false,
+        favoured: true,
         color: "brown",
         gender: "female",
     },
@@ -155,7 +155,7 @@ describe('EShop', () => {
         const maleCats = screen.getAllByRole('article')
         expect(maleCats.length).toBe(2);
         expect(maleCats).toStrictEqual([cards[1], cards[3]])
-        // expect(cards.length).toBe(3)
+
     })
 
     it('Should filter for female cats', async () => {
@@ -169,6 +169,69 @@ describe('EShop', () => {
         const femaleCats = screen.getAllByRole('article')
         expect(femaleCats.length).toBe(4);
         expect(femaleCats).toStrictEqual([cards[0], cards[2], cards[4], cards[5]])
-        // expect(cards.length).toBe(3)
+
     })
+
+    it('Should filter favorite only cats', async () => {
+        render(<Eshop />)
+        const cards = await screen.findAllByRole('article')
+        const selectFavCats: HTMLSelectElement = screen.getByLabelText('filterByFavorite')
+        userEvent.selectOptions(selectFavCats, 'favorite')
+        expect(selectFavCats.value).toBe('favorite')
+        expect(screen.getAllByRole('article').length).toBe(3)
+        expect(screen.getAllByRole('article')).toStrictEqual([cards[0], cards[1], cards[5]])
+    })
+
+    it('Should filter unfavorite only cats', async () => {
+        render(<Eshop />)
+        const cards = await screen.findAllByRole('article')
+        const selectFavCats: HTMLSelectElement = screen.getByLabelText('filterByFavorite')
+        userEvent.selectOptions(selectFavCats, 'unfavorite')
+        expect(selectFavCats.value).toBe('unfavorite')
+        expect(screen.getAllByRole('article').length).toBe(3)
+        expect(screen.getAllByRole('article')).toStrictEqual([cards[2], cards[3], cards[4]])
+    })
+
+    it("Should filter favorite & males cats", async () => {
+        render(<Eshop />)
+        const cards = await screen.findAllByRole('article')
+        const selectMaleCats: HTMLSelectElement = screen.getByLabelText('filterByGender')
+        const selectFavCats: HTMLSelectElement = screen.getByLabelText('filterByFavorite')
+        userEvent.selectOptions(selectFavCats, 'favorite');
+        userEvent.selectOptions(selectMaleCats, 'male');
+        expect(screen.getAllByRole('article').length).toBe(1)
+        expect(screen.getAllByRole('article')).toStrictEqual([cards[1]])
+
+
+    })
+    it("Should filter unfavorite & males cats", async () => {
+        render(<Eshop />)
+        const cards = await screen.findAllByRole('article')
+        const selectMaleCats: HTMLSelectElement = screen.getByLabelText('filterByGender')
+        const selectFavCats: HTMLSelectElement = screen.getByLabelText('filterByFavorite')
+        userEvent.selectOptions(selectFavCats, 'unfavorite');
+        userEvent.selectOptions(selectMaleCats, 'male');
+        expect(screen.getAllByRole('article').length).toBe(1)
+        expect(screen.getAllByRole('article')).toStrictEqual([cards[3]])
+    })
+    it("Should filter favorite & females cats", async () => {
+        render(<Eshop />)
+        const cards = await screen.findAllByRole('article')
+        const selectMaleCats: HTMLSelectElement = screen.getByLabelText('filterByGender')
+        const selectFavCats: HTMLSelectElement = screen.getByLabelText('filterByFavorite')
+        userEvent.selectOptions(selectFavCats, 'favorite');
+        userEvent.selectOptions(selectMaleCats, 'female');
+        expect(screen.getAllByRole('article').length).toBe(2)
+        expect(screen.getAllByRole('article')).toStrictEqual([cards[0], cards[5]])
+    })
+    it("Should filter unfavorite & females cats", (async () => {
+        render(<Eshop />)
+        const cards = await screen.findAllByRole('article')
+        const selectMaleCats: HTMLSelectElement = screen.getByLabelText('filterByGender')
+        const selectFavCats: HTMLSelectElement = screen.getByLabelText('filterByFavorite')
+        userEvent.selectOptions(selectFavCats, 'unfavorite');
+        userEvent.selectOptions(selectMaleCats, 'female');
+        expect(screen.getAllByRole('article').length).toBe(2)
+        expect(screen.getAllByRole('article')).toStrictEqual([cards[2], cards[4]])
+    }))
 })
