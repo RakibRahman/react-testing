@@ -1,5 +1,5 @@
 import { Eshop } from '../Eshop'
-import { render, screen } from '@testing-library/react'
+import { render, screen, within } from '@testing-library/react'
 import { rest } from 'msw'
 import { setupServer } from 'msw/node'
 import userEvent from '@testing-library/user-event';
@@ -234,4 +234,15 @@ describe('EShop', () => {
         expect(screen.getAllByRole('article').length).toBe(2)
         expect(screen.getAllByRole('article')).toStrictEqual([cards[2], cards[4]])
     }))
+
+    it('Should update favorite cats if clicked om any unfavorite heart button', async () => {
+        render(<Eshop />)
+        const cards = await screen.findAllByRole('article')
+        userEvent.click(within(cards[2]).getByRole('button'))
+        const selectFavCats: HTMLSelectElement = screen.getByLabelText('filterByFavorite')
+        userEvent.selectOptions(selectFavCats, 'favorite')
+        expect(selectFavCats.value).toBe('favorite')
+        expect(screen.getAllByRole('article').length).toBe(4)
+        expect(screen.getAllByRole('article')).toStrictEqual([cards[0], cards[1], cards[2], cards[5]])
+    })
 })

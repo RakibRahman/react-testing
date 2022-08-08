@@ -36,5 +36,5 @@ export const useFetchProducts = <T>(url: string) => {
     }, []);
 
 
-    return { data, error, loading }
+    return { data, error, loading, setData }
 }

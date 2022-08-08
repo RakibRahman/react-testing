@@ -9,7 +9,7 @@ export type FilterByCategory = {
     favorite: 'any' | 'favorite' | 'unfavorite' | string
 }
 export const Eshop = () => {
-    const { data, error, loading } = useFetchProducts<Cat>('http://localhost:4000/cats')
+    const { data, error, loading, setData } = useFetchProducts<Cat>('http://localhost:4000/cats')
     const [filterCat, setFilterCat] = useState<FilterByCategory>({
         gender: 'any',
         favorite: 'any'
@@ -24,7 +24,7 @@ export const Eshop = () => {
     return (
         <div className="flex justify-between w-full px-6">
             <Filter filterCat={filterCat} setFilterCat={setFilterCat} />
-            <Cards data={catsData(filterCat.gender, filterCat.favorite)} loading={loading} error={error} />
+            <Cards data={catsData(filterCat.gender, filterCat.favorite)} loading={loading} error={error} setData={setData} />
         </div>
     )
 }
