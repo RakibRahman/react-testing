@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useMemo } from "react";
 import { Cards } from "./Cards";
 import { Filter } from "./Filter";
 import {
@@ -8,7 +8,7 @@ import {
 } from "./models/Eshop.interface";
 import { useFetchProducts } from "./utils/apiOperations";
 
-const EshopContext = createContext({} as ContextInterface);
+export const EshopContext = createContext({} as ContextInterface);
 
 export function useShopData() {
     return useContext(EshopContext);
@@ -40,16 +40,19 @@ export const Eshop = () => {
         return result;
     };
 
+
+    const contextValue = useMemo(() => ({
+        data: catsData(filterCat.gender, filterCat.favorite),
+        setData,
+        error,
+        loading,
+        filterCat,
+        setFilterCat,
+    }), [data, error, loading, filterCat])
+
     return (
         <EshopContext.Provider
-            value={{
-                data: catsData(filterCat.gender, filterCat.favorite),
-                setData,
-                error,
-                loading,
-                filterCat,
-                setFilterCat,
-            }}
+            value={contextValue}
         >
             <div className="flex justify-between w-full px-6">
                 <Filter />
