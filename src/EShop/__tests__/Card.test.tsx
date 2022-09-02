@@ -16,43 +16,50 @@ const mockData = {
   gender: "male",
 };
 
+const defaultOptions = {
+  cat: mockData,
+  updateFavorites: jest.fn()
+}
+
 describe("Card Component", () => {
   it("should render a card with image", () => {
-    render(<Card cat={mockData} />);
+    render(<Card {...defaultOptions} />);
     expect(screen.getByRole("img")).toHaveAttribute("src", mockData.image.url);
   });
 
   it("Successfully renders a card with heading", () => {
-    render(<Card cat={mockData} />);
+    render(<Card {...defaultOptions} />);
     expect(screen.getByRole("heading", { name: /felix/i })).toBeInTheDocument();
   });
 
   it("Successfully renders a card with color", () => {
-    render(<Card cat={mockData} />);
+    render(<Card {...defaultOptions} />);
+
     expect(screen.getByText(/grey/i).textContent).toBe("grey");
   });
 
   it("Successfully renders a card with updated name", () => {
-    render(<Card cat={{ ...mockData, name: "pakura" }} />);
+    render(<Card cat={{ ...mockData, name: "pakura" }} updateFavorites={jest.fn()} />);
     expect(
       screen.getByRole("heading", { name: /pakura/i })
     ).toBeInTheDocument();
   });
 
   it("Card should show outline heart", () => {
-    render(<Card cat={mockData} />);
+    render(<Card {...defaultOptions} />);
+
     expect(screen.getByRole("button")).toHaveClass("icon-heart-outline");
     expect(screen.getByRole("button")).not.toHaveClass("icon-heart-fill");
   });
 
   it("Card should show fill heart", () => {
-    render(<Card cat={{ ...mockData, favoured: true }} />);
+    render(<Card cat={{ ...mockData, favoured: true }} updateFavorites={jest.fn()} />);
     expect(screen.getByRole("button")).toHaveClass("icon-heart-fill");
     expect(screen.getByRole("button")).not.toHaveClass("icon-heart-outline");
   });
 
   it("Should toggle heart status", () => {
-    render(<Card cat={{ ...mockData, favoured: true }} />);
+    render(<Card cat={{ ...mockData, favoured: true }} updateFavorites={jest.fn()} />);
     expect(screen.getByRole("button")).toHaveClass("icon-heart-fill");
     expect(screen.getByRole("button")).not.toHaveClass("icon-heart-outline");
     userEvent.click(screen.getByRole("button"));
